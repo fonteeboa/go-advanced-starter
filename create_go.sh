@@ -233,7 +233,7 @@ while [[ $# -gt 0 ]]; do
             project_type="library"
             shift
             ;;
-        --logg|--mysql|--gin|--echo|--gorm|--viper|--cobra|--mux|--logrus|--sqlx|--jwtgo|--goredis|--testify|--ginjwt|--ginkgo|--golang-lru|--gonum|--govalidator|--gorillaw|--mongodriver|--aws|--grpc|--postgres)
+        --logg|--mysql|--gin|--echo|--gorm|--viper|--cobra|--mux|--logrus|--sqlx|--jwtgo|--goredis|--testify|--ginjwt|--ginkgo|--golang-lru|--gonum|--govalidator|--gorillaw|--mongodriver|--aws|--grpc|--postgres--mfa-authy|--mfa-duo|--mfa-okta|--mfa-google|--mfa-azure|--mfa-otp)
             selected_libraries+=("$1")
             shift
             ;;
