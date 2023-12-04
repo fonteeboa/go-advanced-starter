@@ -21,50 +21,50 @@ library: Define o projeto como uma biblioteca.
 O script oferece a instalação de várias bibliotecas, categorizadas da seguinte forma:
 
 ```
-# Logging
+🔹 Logging
 
 github.com/fonteeboa/go-log-guardian.
 github.com/sirupsen/logrus.
 
-# Banco de Dados Relacional
+🔹 Banco de Dados Relacional
 
 github.com/go-sql-driver/mysql.
 gorm.io/driver/postgres.
 github.com/jmoiron/sqlx.
 
-# Banco de Dados Não Relacional
+🔹 Banco de Dados Não Relacional
 
 go.mongodb.org/mongo-driver/mongo.
 
-# Frameworks Web
+🔹 Frameworks Web
 
 github.com/gin-gonic/gin.
 github.com/labstack/echo.
 
-# Biblioteca de Mapeamento Objeto-Relacional (ORM)
+🔹 Biblioteca de Mapeamento Objeto-Relacional (ORM)
 
 github.com/go-gorm/gorm.
 
-# Biblioteca de Manipulação de Configurações
+🔹 Biblioteca de Manipulação de Configurações
 
 github.com/spf13/viper.
 
-# Roteamento
+🔹 Roteamento
 
 github.com/spf13/cobra.
 github.com/gorilla/mux.
 
-# Autenticação e Segurança
+🔹 Autenticação e Segurança
 
 github.com/dgrijalva/jwt-go.
 github.com/appleboy/gin-jwt.
 
-# Testes
+🔹 Testes
 
 github.com/stretchr/testify.
 github.com/onsi/ginkgo.
 
-# Bibliotecas de Autenticação de Múltiplos Fatores (MFA)
+🔹 Bibliotecas de Autenticação de Múltiplos Fatores (MFA)
 
 github.com/authy/authy-go
 github.com/duosecurity/duo_api_golang
@@ -73,7 +73,7 @@ github.com/dgryski/dgoogauth
 github.com/Azure-Samples/active-directory-go-native-multitenant-v2
 github.com/pquerna/otp/totp
 
-# Outras Bibliotecas Úteis
+🔹 Outras Bibliotecas Úteis
 
 github.com/go-redis/redis/v8.
 github.com/hashicorp/golang-lru.
@@ -97,7 +97,7 @@ PROJECT_NAME: Nome do projeto a ser criado.
 ## Exemplo de Uso
 ```
 ./create_go.sh project_name --mysql --gin --echo
-# Este comando criará um novo projeto chamado project_name como um serviço (microserviço) e instalará os pacotes github.com/gin-gonic/gin e github.com/go-sql-driver/mysql.
+🔹 Este comando criará um novo projeto chamado project_name como um serviço (microserviço) e instalará os pacotes github.com/gin-gonic/gin e github.com/go-sql-driver/mysql.
 ```
 
 ## Mensagem Helpers
@@ -174,6 +174,6 @@ Example usage:
 
 <h2 align="center"> <strong>Observações</strong> </h2>
 
-Lembre-se de adaptar o projeto criado para se adequar à sua realidade!
+🔹 Lembre-se de adaptar o projeto criado para se adequar à sua realidade!
 
-As bibiliotecas atuais foram escolhidas por serem as mais comuns em projetos que crio para estudos os quais em sua grande maioria não estão presentes no github.
+🔹 As bibiliotecas atuais foram escolhidas por serem as mais comuns em projetos que crio para estudos os quais em sua grande maioria não estão presentes no github.
