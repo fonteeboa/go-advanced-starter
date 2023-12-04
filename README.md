@@ -5,7 +5,7 @@
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 
-<h2 align="center"> <strong>Uso</strong> </h2>
+<h2 align="center"> <strong>Sobre</strong> </h2>
 Este script em bash tem como objetivo facilitar a criação de novos projetos em Go (Golang), oferecendo uma estrutura de diretórios inicial e a instalação de bibliotecas comumente utilizadas.
 
 <h2 align="center"> <strong>Estruturas de Projeto</strong> </h2>
