@@ -83,7 +83,7 @@ create_project_directories() {
         mkdir -p internal/infra/database
         mkdir -p internal/infra/http/routes
         mkdir -p internal/infra/providers
-        mkdir -p internal/modules/module1/{controller,domain,repositories,services,test/mock}
+        mkdir -p internal/modules/module1/{controller,domain,repositories,services,tests/mock}
     else
         echo "Creating library project..."
         mkdir -p internal/service
