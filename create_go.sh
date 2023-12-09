@@ -257,6 +257,8 @@ if [ -z "$project_name" ]; then
     exit 1
 fi
 
+mkdir -p "projects" && cd projects || exit
+
 # Create project directory
 mkdir -p "$project_name"
 cd "$project_name" || exit
