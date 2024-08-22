@@ -23,6 +23,7 @@ OPTIONS:
             --mysql Installs the package github.com/go-sql-driver/mysql
             --postgres Installs the package gorm.io/driver/postgres
             --sqlx Installs the package github.com/jmoiron/sqlx
+            --neon Installs the package github.com/lib/pq
         
         No Relational Database:
             --mongodriver Installs the package go.mongodb.org/mongo-driver/mongo
@@ -93,6 +94,160 @@ create_project_directories() {
     touch README.md
 }
 
+# Function to create optimized main.go
+create_main_go() {
+    local libraries=("$@")
+    local db_imports=""
+    local db_setup=""
+    local db_connection_test=""
+    local db_connection_select_test=""
+    local load_env='
+    // Carrega variáveis de ambiente do arquivo .env
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+    }
+    ';
+    local load_end_usage=""
+
+    for lib in "${libraries[@]}"; do
+        case $lib in
+            "--mysql")
+                load_end_usage=$load_env;
+                db_imports+='
+    "github.com/joho/godotenv"
+    _ "github.com/go-sql-driver/mysql"'
+                db_setup='
+    dsn := os.Getenv("MYSQL_USER") + ":" + os.Getenv("MYSQL_PASSWORD") + "@tcp(" + os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT") + ")/" + os.Getenv("MYSQL_DBNAME")'
+                db_connection_test='
+    db, err := sql.Open("mysql", dsn)
+    if err != nil {
+        log.Fatalf("Could not connect to MySQL: %v", err)
+    }'
+                ;;
+            "--postgres")
+                load_end_usage=$load_env;
+                db_imports+='
+    "github.com/joho/godotenv"
+    _ "github.com/lib/pq"'
+                db_setup='
+    dsn := "postgres://" + os.Getenv("POSTGRES_USER") + ":" + os.Getenv("POSTGRES_PASSWORD") + "@" + os.Getenv("POSTGRES_HOST") + ":" + os.Getenv("POSTGRES_EXTERNAL_PORT") + "/" + os.Getenv("POSTGRES_DB") + "?sslmode=" + os.Getenv("NEON_SSLMODE")'
+                db_connection_test='
+    db, err := sql.Open("postgres", dsn)
+    if err != nil {
+        log.Fatalf("Could not connect to PostgreSQL/Neon: %v", err)
+    }'
+                ;;
+            "--mongodriver")
+                load_end_usage=$load_env;
+                db_imports+='
+    "github.com/joho/godotenv"
+    "go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/mongo/options"
+    "context"
+    "time"'
+                db_setup='
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGODB_URI")))
+    if err != nil {
+        log.Fatalf("Could not create MongoDB client: %v", err)
+    }
+    err = client.Connect(ctx)
+    if err != nil {
+        log.Fatalf("Could not connect to MongoDB: %v", err)
+    }'
+                db_connection_test='
+    err = client.Ping(ctx, nil)
+    if err != nil {
+        log.Fatalf("Could not ping MongoDB: %v", err)
+    }'
+                ;;
+
+                "--neon")
+                load_end_usage=$load_env;
+                db_imports+='
+    "github.com/joho/godotenv"
+    _ "github.com/lib/pq"
+    "database/sql"
+    '
+                db_setup='
+
+    user := os.Getenv("NEON_USER")
+    password := os.Getenv("NEON_PASSWORD")
+    host := os.Getenv("NEON_HOST")
+    dbname := os.Getenv("NEON_DBNAME")
+    sslmode := os.Getenv("NEON_SSLMODE")
+
+    if user == "" || password == "" || host == "" || dbname == "" || sslmode == "" {
+        log.Fatal("One or more environment variables are not set")
+    }
+
+    dsn := fmt.Sprintf("postgresql://%s:%s@%s/%s?sslmode=%s",
+        user,
+        password,
+        host,
+        dbname,
+        sslmode,
+    )
+'
+                db_connection_test='
+    db, err := sql.Open("postgres", dsn)
+    if err != nil {
+        log.Fatalf("Could not connect to Neon database: %v", err)
+    }'
+                db_connection_select_test='
+                    var version string
+    if err := db.QueryRow("select version()").Scan(&version); err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("version=%s\n", version)
+    '
+                ;;
+        esac
+    done
+
+    cat <<EOF > main.go
+package main
+
+import (
+    "fmt"
+    "log"
+    "os"$db_imports
+)
+
+func main() {
+$load_end_usage$db_setup$db_connection_test
+
+    defer db.Close()
+
+    err = db.Ping()
+    if err != nil {
+        log.Fatalf("Could not ping the database: %v", err)
+    }
+
+$db_connection_select_test
+
+    fmt.Println("Connected to the database successfully!")
+}
+EOF
+
+    # Default to "Hello, World!" if no database libraries were selected
+    if [ -z "$db_imports" ]; then
+        cat <<EOF > main.go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+EOF
+    fi
+}
+
+
 # Install selected libraries
 install_libraries() {
     local libraries=("$@")
@@ -101,6 +256,7 @@ install_libraries() {
         case $lib in
             "--mysql")
                 go get -u github.com/go-sql-driver/mysql
+                go get github.com/joho/godotenv
                 echo "MYSQL_HOST=" >> .env
                 echo "MYSQL_PORT=" >> .env
                 echo "MYSQL_USER=" >> .env
@@ -109,6 +265,7 @@ install_libraries() {
                 ;;
             "--postgres")
                 go get -u gorm.io/driver/postgres
+                go get github.com/joho/godotenv
                 echo "POSTGRES_HOST=" >> .env
                 echo "POSTGRES_EXTERNAL_PORT=" >> .env
                 echo "POSTGRES_USER=" >> .env
@@ -172,6 +329,7 @@ install_libraries() {
                 ;;
             "--mongodriver")
                 go get -u go.mongodb.org/mongo-driver/mongo
+                go get github.com/joho/godotenv
                 echo "MONGODB_URI=" >> .env
                 echo "MONGODB_DBNAME=" >> .env
                 ;;
@@ -203,6 +361,15 @@ install_libraries() {
             "--mfa-otp")
                 go get -u github.com/pquerna/otp/totp
                 ;;
+            "--neon")
+                go get github.com/joho/godotenv
+                go get github.com/lib/pq
+                echo "NEON_USER=" >> .env
+                echo "NEON_PASSWORD=" >> .env
+                echo "NEON_DBNAME=" >> .env
+                echo "NEON_HOST=" >> .env
+                echo "NEON_SSLMODE=" >> .env
+                ;;
             "help")
                 show_help
                 exit 0
@@ -233,7 +400,7 @@ while [[ $# -gt 0 ]]; do
             project_type="library"
             shift
             ;;
-        --logg|--mysql|--gin|--echo|--gorm|--viper|--cobra|--mux|--logrus|--sqlx|--jwtgo|--goredis|--testify|--ginjwt|--ginkgo|--golang-lru|--gonum|--govalidator|--gorillaw|--mongodriver|--aws|--grpc|--postgres--mfa-authy|--mfa-duo|--mfa-okta|--mfa-google|--mfa-azure|--mfa-otp)
+        --logg|--mysql|--gin|--echo|--gorm|--viper|--cobra|--mux|--logrus|--sqlx|--jwtgo|--goredis|--testify|--ginjwt|--ginkgo|--golang-lru|--gonum|--govalidator|--gorillaw|--mongodriver|--aws|--grpc|--postgres--mfa-authy|--mfa-duo|--mfa-okta|--mfa-google|--mfa-azure|--mfa-otp|--neon)
             selected_libraries+=("$1")
             shift
             ;;
@@ -272,9 +439,11 @@ create_project_directories "$project_type"
 # Install selected libraries
 install_libraries "${selected_libraries[@]}"
 
+# Create main.go
+create_main_go "${selected_libraries[@]}"
+
 # Display success message
 cat <<EOF
 Project "$project_name" created successfully!
 Remember to adapt the created project to fit your reality!
 EOF
-

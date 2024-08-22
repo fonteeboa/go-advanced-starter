@@ -31,6 +31,7 @@ github.com/sirupsen/logrus.
 github.com/go-sql-driver/mysql.
 gorm.io/driver/postgres.
 github.com/jmoiron/sqlx.
+github.com/lib/pq.
 
 🔹 Banco de Dados Não Relacional
 
@@ -47,6 +48,7 @@ github.com/go-gorm/gorm.
 
 🔹 Biblioteca de Manipulação de Configurações
 
+github.com/joho/godotenv.
 github.com/spf13/viper.
 
 🔹 Roteamento
