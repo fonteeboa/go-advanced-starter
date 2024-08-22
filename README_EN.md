@@ -4,22 +4,22 @@
 
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-For the English version of this README, click [here](README_EN.md).
+Para a versão em português deste README, clique [aqui](README.md).
 
-<h2 align="center"> <strong>Sobre</strong> </h2>
-Este script em bash tem como objetivo facilitar a criação de novos projetos em Go (Golang), oferecendo uma estrutura de diretórios inicial e a instalação de bibliotecas comumente utilizadas.
+<h2 align="center"> <strong>About</strong> </h2>
+This bash script is designed to facilitate the creation of new Go (Golang) projects by offering an initial directory structure and installing commonly used libraries.
 
-<h2 align="center"> <strong>Estruturas de Projeto</strong> </h2>
+<h2 align="center"> <strong>Project Structures</strong> </h2>
+There are two main project structures supported:
 
-Existem duas estruturas principais de projeto suportadas:
 ```
-service: Define o projeto como um serviço, seguindo a estrutura de microserviço.
-library: Define o projeto como uma biblioteca.
+service: Defines the project as a service, following a microservice structure.
+library: Defines the project as a library.
 ```
 
-<h2 align="center"> <strong>Bibliotecas Disponíveis</strong> </h2>
+<h2 align="center"> <strong>Available Libraries</strong> </h2>
 
-O script oferece a instalação de várias bibliotecas, categorizadas da seguinte forma:
+The script offers the installation of several libraries, categorized as follows:
 
 ```
 🔹 Logging
@@ -27,47 +27,47 @@ O script oferece a instalação de várias bibliotecas, categorizadas da seguint
 github.com/fonteeboa/go-log-guardian.
 github.com/sirupsen/logrus.
 
-🔹 Banco de Dados Relacional
+🔹 Relational Database
 
 github.com/go-sql-driver/mysql.
 gorm.io/driver/postgres.
 github.com/jmoiron/sqlx.
 github.com/lib/pq.
 
-🔹 Banco de Dados Não Relacional
+🔹 NoSQL Database
 
 go.mongodb.org/mongo-driver/mongo.
 
-🔹 Frameworks Web
+🔹 Web Frameworks
 
 github.com/gin-gonic/gin.
 github.com/labstack/echo.
 
-🔹 Biblioteca de Mapeamento Objeto-Relacional (ORM)
+🔹 Object-Relational Mapping (ORM) Library
 
 github.com/go-gorm/gorm.
 
-🔹 Biblioteca de Manipulação de Configurações
+🔹 Configuration Management Library
 
 github.com/joho/godotenv.
 github.com/spf13/viper.
 
-🔹 Roteamento
+🔹 Routing
 
 github.com/spf13/cobra.
 github.com/gorilla/mux.
 
-🔹 Autenticação e Segurança
+🔹 Authentication and Security
 
 github.com/dgrijalva/jwt-go.
 github.com/appleboy/gin-jwt.
 
-🔹 Testes
+🔹 Testing
 
 github.com/stretchr/testify.
 github.com/onsi/ginkgo.
 
-🔹 Bibliotecas de Autenticação de Múltiplos Fatores (MFA)
+🔹 Multi-Factor Authentication (MFA) Libraries
 
 github.com/authy/authy-go
 github.com/duosecurity/duo_api_golang
@@ -76,7 +76,7 @@ github.com/dgryski/dgoogauth
 github.com/Azure-Samples/active-directory-go-native-multitenant-v2
 github.com/pquerna/otp/totp
 
-🔹 Outras Bibliotecas Úteis
+🔹 Other Useful Libraries
 
 github.com/go-redis/redis/v8.
 github.com/hashicorp/golang-lru.
@@ -87,23 +87,24 @@ github.com/aws/aws-sdk-go.
 google.golang.org/grpc.
 ```
 
-<h2 align="center"> <strong>Uso</strong> </h2>
+<h2 align="center"> <strong>Usage</strong> </h2>
 
-O script pode ser usado da seguinte maneira:
+The script can be used as follows:
 
 ```
 bash
 ./create_go.sh PROJECT_NAME [OPTIONS]
-PROJECT_NAME: Nome do projeto a ser criado.
+PROJECT_NAME: Name of the project to be created.
 ```
 
-## Exemplo de Uso
+## Example Usage
+
 ```
 ./create_go.sh project_name --mysql --gin --echo
-🔹 Este comando criará um novo projeto chamado project_name como um serviço (microserviço) e instalará os pacotes github.com/gin-gonic/gin e github.com/go-sql-driver/mysql.
+🔹 This command will create a new project called project_name as a service (microservice) and install the packages github.com/gin-gonic/gin and github.com/go-sql-driver/mysql.
 ```
 
-## Mensagem Helpers
+## Helper Messages
 
 ```
 $ ./create_go.sh --help
@@ -175,8 +176,8 @@ Example usage:
   This will create a new project 'project_name' as a service (microservice) and install the packages 'github.com/gin-gonic/gin' and 'github.com/go-sql-driver/mysql'.
 ```
 
-<h2 align="center"> <strong>Observações</strong> </h2>
+<h2 align="center"> <strong>Notes</strong> </h2>
 
-🔹 Lembre-se de adaptar o projeto criado para se adequar à sua realidade!
+🔹 Remember to adapt the created project to fit your specific needs!
 
-🔹 As bibiliotecas atuais foram escolhidas por serem as mais comuns em projetos que crio para estudos os quais em sua grande maioria não estão presentes no github.
+🔹 The current libraries were chosen because they are the most commonly used in projects I create for study purposes, most of which are not published on GitHub.
